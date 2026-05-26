@@ -205,33 +205,22 @@ export default function RoadmapPage() {
           )}
 
           {activeTab === 'Scholarships' && (
-            <div className="grid md:grid-cols-2 gap-6">
-              {plan.scholarships?.map((s: any, i: number) => (
-                <div key={i} className="bg-white/5 border border-white/10 rounded-2xl p-6">
-                  <div className="flex justify-between items-start mb-2">
-                    <h3 className="font-bold">{s.name}</h3>
-                    <span className="bg-yellow-500/20 text-yellow-300 text-sm px-2 py-0.5 rounded-full shrink-0 ml-2">
-                      {s.amount}
-                    </span>
-                  </div>
-                  <p className="text-white/50 text-sm mb-3">{s.eligibility}</p>
-                  <div className="flex justify-between text-sm">
-                    <span className="text-white/40">Deadline: <span className="text-white/70">{s.deadline}</span></span>
-                    {s.link && s.link !== 'N/A' && (
-                      
-                        href={s.link}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-indigo-400 hover:underline"
-                      >
-                        Apply →
-                      </a>
-                    )}
-                  </div>
-                </div>
-              ))}
-            </div>
-          )}
+  <div className="grid md:grid-cols-2 gap-6">
+    {plan.scholarships?.map((s: any, i: number) => (
+      <div key={i} className="bg-white/5 border border-white/10 rounded-2xl p-6">
+        <div className="flex justify-between items-start mb-2">
+          <h3 className="font-bold">{s.name}</h3>
+          <span className="bg-yellow-500/20 text-yellow-300 text-sm px-2 py-0.5 rounded-full shrink-0 ml-2">{s.amount}</span>
+        </div>
+        <p className="text-white/50 text-sm mb-3">{s.eligibility}</p>
+        <div className="flex justify-between text-sm">
+          <span className="text-white/40">Deadline: <span className="text-white/70">{s.deadline}</span></span>
+          {s.link && s.link !== 'N/A' && (<a href={s.link} target="_blank" rel="noopener noreferrer" className="text-indigo-400 hover:underline">Apply →</a>)}
+        </div>
+      </div>
+    ))}
+  </div>
+)}
 
           {activeTab === 'Internships' && (
             <div className="grid md:grid-cols-2 gap-6">
