@@ -53,24 +53,14 @@ export default function DashboardPage() {
     <main className="min-h-screen bg-gradient-to-br from-indigo-950 via-purple-950 to-slate-900 text-white">
       {/* Nav */}
       <nav className="flex items-center justify-between px-8 py-6 max-w-6xl mx-auto border-b border-white/10">
-        <a href="/" className="text-xl font-bold tracking-tight">
-          Pathway<span className="text-indigo-400">IQ</span>
-        </a>
-        <div className="flex gap-4 items-center">
-          
-            href="/profile"
-            className="text-white/50 hover:text-white text-sm transition"
-          >
-            Profile
-          </a>
-          <button
-            onClick={handleLogout}
-            className="text-white/50 hover:text-white text-sm transition"
-          >
-            Log out
-          </button>
-        </div>
-      </nav>
+  <a href="/" className="text-xl font-bold tracking-tight">
+    Pathway<span className="text-indigo-400">IQ</span>
+  </a>
+  <div className="flex gap-4 items-center">
+    <a href="/profile" className="text-white/50 hover:text-white text-sm transition">Profile</a>
+    <button onClick={handleLogout} className="text-white/50 hover:text-white text-sm transition">Log out</button>
+  </div>
+</nav>
 
       <div className="max-w-6xl mx-auto px-8 py-12">
         {/* Welcome */}
