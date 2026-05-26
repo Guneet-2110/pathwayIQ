@@ -2,17 +2,16 @@
 
 import { useState } from 'react'
 import { createClient } from '@/lib/supabase'
-import { useRouter } from 'next/navigation'
 
 export default function SignupPage() {
   const supabase = createClient()
-  const router = useRouter()
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [grade, setGrade] = useState('')
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
+  const [success, setSuccess] = useState(false)
 
   async function handleSignup() {
     setLoading(true)
@@ -21,6 +20,9 @@ export default function SignupPage() {
     const { data, error: signupError } = await supabase.auth.signUp({
       email,
       password,
+      options: {
+        emailRedirectTo: `${window.location.origin}/dashboard`,
+      },
     })
 
     if (signupError) {
@@ -37,7 +39,8 @@ export default function SignupPage() {
       })
     }
 
-    router.push('/quiz')
+    setSuccess(true)
+    setLoading(false)
   }
 
   return (
@@ -51,73 +54,84 @@ export default function SignupPage() {
         </div>
 
         <div className="bg-white/5 border border-white/10 rounded-2xl p-8 flex flex-col gap-4">
-          <div>
-            <label className="text-sm text-white/60 mb-1 block">Full Name</label>
-            <input
-              type="text"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              placeholder="Alex Johnson"
-              className="w-full bg-white/10 border border-white/10 rounded-lg px-4 py-3 text-white placeholder-white/30 focus:outline-none focus:border-indigo-400 transition"
-            />
-          </div>
+          {success ? (
+            <div className="bg-indigo-500/20 border border-indigo-400/30 rounded-lg p-6 text-center">
+              <p className="text-indigo-300 font-semibold text-lg mb-2">Check your email! 📬</p>
+              <p className="text-white/50 text-sm leading-relaxed">
+                We sent a confirmation link to{' '}
+                <span className="text-white font-medium">{email}</span>.
+                Click it to activate your account and get started.
+              </p>
+            </div>
+          ) : (
+            <>
+              <div>
+                <label className="text-sm text-white/60 mb-1 block">Full Name</label>
+                <input
+                  type="text"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  placeholder="Alex Johnson"
+                  className="w-full bg-white/10 border border-white/10 rounded-lg px-4 py-3 text-white placeholder-white/30 focus:outline-none focus:border-indigo-400 transition"
+                />
+              </div>
 
-          <div>
-            <label className="text-sm text-white/60 mb-1 block">Email</label>
-            <input
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="alex@email.com"
-              className="w-full bg-white/10 border border-white/10 rounded-lg px-4 py-3 text-white placeholder-white/30 focus:outline-none focus:border-indigo-400 transition"
-            />
-          </div>
+              <div>
+                <label className="text-sm text-white/60 mb-1 block">Email</label>
+                <input
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="alex@email.com"
+                  className="w-full bg-white/10 border border-white/10 rounded-lg px-4 py-3 text-white placeholder-white/30 focus:outline-none focus:border-indigo-400 transition"
+                />
+              </div>
 
-          <div>
-            <label className="text-sm text-white/60 mb-1 block">Password</label>
-            <input
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              placeholder="••••••••"
-              className="w-full bg-white/10 border border-white/10 rounded-lg px-4 py-3 text-white placeholder-white/30 focus:outline-none focus:border-indigo-400 transition"
-            />
-          </div>
+              <div>
+                <label className="text-sm text-white/60 mb-1 block">Password</label>
+                <input
+                  type="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  placeholder="••••••••"
+                  className="w-full bg-white/10 border border-white/10 rounded-lg px-4 py-3 text-white placeholder-white/30 focus:outline-none focus:border-indigo-400 transition"
+                />
+              </div>
 
-          <div>
-            <label className="text-sm text-white/60 mb-1 block">Current Grade</label>
-            <select
-              value={grade}
-              onChange={(e) => setGrade(e.target.value)}
-              className="w-full bg-white/10 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-indigo-400 transition"
-            >
-              <option value="" className="bg-slate-900">Select grade</option>
-              <option value="8" className="bg-slate-900">8th Grade (incoming freshman)</option>
-              <option value="9" className="bg-slate-900">9th Grade (Freshman)</option>
-              <option value="10" className="bg-slate-900">10th Grade (Sophomore)</option>
-              <option value="11" className="bg-slate-900">11th Grade (Junior)</option>
-              <option value="12" className="bg-slate-900">12th Grade (Senior)</option>
-            </select>
-          </div>
+              <div>
+                <label className="text-sm text-white/60 mb-1 block">Current Grade</label>
+                <select
+                  value={grade}
+                  onChange={(e) => setGrade(e.target.value)}
+                  className="w-full bg-white/10 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-indigo-400 transition"
+                >
+                  <option value="" className="bg-slate-900">Select grade</option>
+                  <option value="8" className="bg-slate-900">8th Grade (incoming freshman)</option>
+                  <option value="9" className="bg-slate-900">9th Grade (Freshman)</option>
+                  <option value="10" className="bg-slate-900">10th Grade (Sophomore)</option>
+                  <option value="11" className="bg-slate-900">11th Grade (Junior)</option>
+                  <option value="12" className="bg-slate-900">12th Grade (Senior)</option>
+                </select>
+              </div>
 
-          {error && (
-            <p className="text-red-400 text-sm text-center">{error}</p>
+              {error && (
+                <p className="text-red-400 text-sm text-center">{error}</p>
+              )}
+
+              <button
+                onClick={handleSignup}
+                disabled={loading || !name || !email || !password || !grade}
+                className="w-full bg-indigo-500 hover:bg-indigo-400 disabled:opacity-40 disabled:cursor-not-allowed text-white font-semibold py-3 rounded-lg transition mt-2"
+              >
+                {loading ? 'Creating account...' : 'Create Account →'}
+              </button>
+
+              <p className="text-center text-white/40 text-sm">
+                Already have an account?{' '}
+                <a href="/login" className="text-indigo-400 hover:underline">Log in</a>
+              </p>
+            </>
           )}
-
-          <button
-            onClick={handleSignup}
-            disabled={loading || !name || !email || !password || !grade}
-            className="w-full bg-indigo-500 hover:bg-indigo-400 disabled:opacity-40 disabled:cursor-not-allowed text-white font-semibold py-3 rounded-lg transition mt-2"
-          >
-            {loading ? 'Creating account...' : 'Create Account →'}
-          </button>
-
-          <p className="text-center text-white/40 text-sm">
-            Already have an account?{' '}
-            <a href="/login" className="text-indigo-400 hover:underline">
-              Log in
-            </a>
-          </p>
         </div>
       </div>
     </main>
