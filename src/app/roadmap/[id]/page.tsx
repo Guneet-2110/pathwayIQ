@@ -1,5 +1,7 @@
 'use client'
 
+import ChecklistItem from '@/components/ChecklistItem'
+import ProgressBar from '@/components/ProgressBar'
 import { useEffect, useState } from 'react'
 import { useParams, useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase'
