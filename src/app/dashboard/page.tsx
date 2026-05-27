@@ -51,20 +51,18 @@ export default function DashboardPage() {
 
   return (
     <main className="min-h-screen bg-gradient-to-br from-indigo-950 via-purple-950 to-slate-900 text-white">
-      {/* Nav */}
       <nav className="flex items-center justify-between px-8 py-6 max-w-6xl mx-auto border-b border-white/10">
-  <a href="/" className="text-xl font-bold tracking-tight">
-    Pathway<span className="text-indigo-400">IQ</span>
-  </a>
-  <div className="flex gap-4 items-center">
-    <a href="/compare" className="text-white/50 hover:text-white text-sm transition">Compare</a>
-<a href="/profile" className="text-white/50 hover:text-white text-sm transition">Profile</a>
-    <button onClick={handleLogout} className="text-white/50 hover:text-white text-sm transition">Log out</button>
-  </div>
-</nav>
+        <a href="/" className="text-xl font-bold tracking-tight">
+          Pathway<span className="text-indigo-400">IQ</span>
+        </a>
+        <div className="flex gap-4 items-center">
+          <a href="/compare" className="text-white/50 hover:text-white text-sm transition">Compare</a>
+          <a href="/profile" className="text-white/50 hover:text-white text-sm transition">Profile</a>
+          <button onClick={handleLogout} className="text-white/50 hover:text-white text-sm transition">Log out</button>
+        </div>
+      </nav>
 
       <div className="max-w-6xl mx-auto px-8 py-12">
-        {/* Welcome */}
         <div className="mb-10">
           <h1 className="text-3xl font-extrabold mb-1">
             Welcome back{profile?.name ? `, ${profile.name.split(' ')[0]}` : ''}
@@ -76,7 +74,6 @@ export default function DashboardPage() {
           </p>
         </div>
 
-        {/* New Roadmap CTA */}
         <button
           onClick={() => router.push('/quiz')}
           className="mb-10 flex items-center gap-3 bg-indigo-500 hover:bg-indigo-400 text-white font-semibold px-6 py-3 rounded-xl transition"
@@ -85,28 +82,17 @@ export default function DashboardPage() {
           Build a New Roadmap
         </button>
 
-        {/* Roadmaps */}
         {roadmaps.length === 0 ? (
           <div className="bg-white/5 border border-white/10 rounded-2xl p-12 text-center">
             <p className="text-4xl mb-4">🗺️</p>
             <h2 className="text-xl font-semibold mb-2">No roadmaps yet</h2>
-            <p className="text-white/40 text-sm mb-6">
-              Take the quiz to generate your personalized 4-year plan.
-            </p>
-            <button
-              onClick={() => router.push('/quiz')}
-              className="bg-indigo-500 hover:bg-indigo-400 text-white font-semibold px-6 py-3 rounded-lg transition"
-            >
-              Take the Quiz →
-            </button>
+            <p className="text-white/40 text-sm mb-6">Take the quiz to generate your personalized 4-year plan.</p>
+            <button onClick={() => router.push('/quiz')} className="bg-indigo-500 hover:bg-indigo-400 text-white font-semibold px-6 py-3 rounded-lg transition">Take the Quiz →</button>
           </div>
         ) : (
           <div className="grid md:grid-cols-2 gap-6">
             {roadmaps.map((r) => (
-              <div
-                key={r.id}
-                className="bg-white/5 border border-white/10 rounded-2xl p-6 hover:bg-white/10 transition"
-              >
+              <div key={r.id} className="bg-white/5 border border-white/10 rounded-2xl p-6 hover:bg-white/10 transition">
                 <div className="flex justify-between items-start mb-4">
                   <div>
                     <h2 className="text-xl font-bold mb-1">{r.selected_career}</h2>
@@ -119,15 +105,9 @@ export default function DashboardPage() {
                       })}
                     </p>
                   </div>
-                  <button
-                    onClick={() => handleDelete(r.id)}
-                    className="text-white/20 hover:text-red-400 transition text-sm"
-                  >
-                    Delete
-                  </button>
+                  <button onClick={() => handleDelete(r.id)} className="text-white/20 hover:text-red-400 transition text-sm">Delete</button>
                 </div>
 
-                {/* Career match pills */}
                 <div className="flex flex-wrap gap-2 mb-5">
                   {r.career_matches?.slice(0, 3).map((c: any, i: number) => (
                     <span
@@ -143,12 +123,9 @@ export default function DashboardPage() {
                   ))}
                 </div>
 
-                <button
-                  onClick={() => router.push(`/roadmap/${r.id}`)}
-                  className="w-full bg-indigo-500 hover:bg-indigo-400 text-white font-semibold py-3 rounded-lg transition text-sm"
-                >
-                  View Roadmap →
-                </button>
+                <div className="flex gap-3">
+                  <button onClick={() => router.push(`/roadmap/${r.id}`)} className="flex-1 bg-indigo-500 hover:bg-indigo-400 text-white font-semibold py-3 rounded-lg transition text-sm">View Roadmap →</button>
+                </div>
               </div>
             ))}
           </div>
