@@ -134,7 +134,7 @@ The JSON must follow this exact structure:
 Make everything specific to this student. Use their grade, location, interests, and goals to personalize every section. Generate 3 career matches, 6 universities, 4 scholarships, 3 internships, and fill every year of the roadmap in detail.
 `
 
-    const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' })
+    const model = genAI.getGenerativeModel({ model: 'gemini-2.0-flash' })
     const result = await model.generateContent(prompt)
     const text = result.response.text()
 
