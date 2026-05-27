@@ -16,13 +16,7 @@ export async function POST(req: NextRequest) {
 STUDENT ANSWERS:
 ${JSON.stringify(answers, null, 2)}
 
-Return ONLY a valid JSON object with NO markdown, NO backticks, NO explanation. Just raw JSON.
-
-CRITICAL RULES:
-- Every piece of advice must be specific to THIS student's grade, location, interests, GPA, and career goals
-- For internship and scholarship links, ONLY use real well-known URLs that definitely exist like https://www.fastweb.com or https://www.indeed.com. Do NOT make up specific URLs.
-- Life skills advice must directly reference the student's specific career path
-- Every year of the roadmap must have at least 4 items in each array
+Return ONLY a valid JSON object with NO markdown, NO backticks, NO explanation. Just raw JSON starting with { and ending with }.
 
 {
   "career_matches": [
@@ -31,7 +25,7 @@ CRITICAL RULES:
       "fit_score": 92,
       "description": "3-4 sentence description",
       "salary_range": "$X - $Y per year",
-      "growth_outlook": "High / Medium / Low",
+      "growth_outlook": "High",
       "day_in_life": "2-3 sentences describing a typical day",
       "top_skills_needed": ["skill1", "skill2", "skill3"],
       "biggest_challenges": "2 sentences on the hardest parts"
@@ -39,30 +33,48 @@ CRITICAL RULES:
   ],
   "roadmap": {
     "freshman": {
-      "courses": ["course1"],
-      "ap_classes": ["AP class"],
-      "extracurriculars": ["activity1"],
-      "passion_projects": ["project idea"],
-      "summer": { "activities": ["activity1"], "programs": ["program1"], "books": ["Book by Author"] },
-      "goals": ["goal1"],
+      "courses": ["course1", "course2", "course3", "course4"],
+      "ap_classes": ["AP class1", "AP class2"],
+      "extracurriculars": ["activity1", "activity2", "activity3", "activity4"],
+      "passion_projects": ["project1", "project2"],
+      "summer": { "activities": ["activity1", "activity2"], "programs": ["program1"], "books": ["Book by Author"] },
+      "goals": ["goal1", "goal2", "goal3"],
       "monthly_focus": "Detailed paragraph on what to prioritize",
       "gpa_target": "Target GPA and why",
       "networking_tips": "Specific networking advice"
     },
     "sophomore": {
-      "courses": [], "ap_classes": [], "extracurriculars": [], "passion_projects": [],
-      "summer": { "activities": [], "programs": [], "books": [] },
-      "goals": [], "monthly_focus": "", "gpa_target": "", "networking_tips": ""
+      "courses": ["course1", "course2", "course3", "course4"],
+      "ap_classes": ["AP class1", "AP class2"],
+      "extracurriculars": ["activity1", "activity2", "activity3", "activity4"],
+      "passion_projects": ["project1", "project2"],
+      "summer": { "activities": ["activity1", "activity2"], "programs": ["program1"], "books": ["Book by Author"] },
+      "goals": ["goal1", "goal2", "goal3"],
+      "monthly_focus": "",
+      "gpa_target": "",
+      "networking_tips": ""
     },
     "junior": {
-      "courses": [], "ap_classes": [], "extracurriculars": [], "passion_projects": [],
-      "summer": { "activities": [], "programs": [], "books": [] },
-      "goals": [], "monthly_focus": "", "gpa_target": "", "networking_tips": ""
+      "courses": ["course1", "course2", "course3", "course4"],
+      "ap_classes": ["AP class1", "AP class2"],
+      "extracurriculars": ["activity1", "activity2", "activity3", "activity4"],
+      "passion_projects": ["project1", "project2"],
+      "summer": { "activities": ["activity1", "activity2"], "programs": ["program1"], "books": ["Book by Author"] },
+      "goals": ["goal1", "goal2", "goal3"],
+      "monthly_focus": "",
+      "gpa_target": "",
+      "networking_tips": ""
     },
     "senior": {
-      "courses": [], "ap_classes": [], "extracurriculars": [], "passion_projects": [],
-      "summer": { "activities": [], "programs": [], "books": [] },
-      "goals": [], "monthly_focus": "", "gpa_target": "", "networking_tips": ""
+      "courses": ["course1", "course2", "course3", "course4"],
+      "ap_classes": ["AP class1", "AP class2"],
+      "extracurriculars": ["activity1", "activity2", "activity3", "activity4"],
+      "passion_projects": ["project1", "project2"],
+      "summer": { "activities": ["activity1", "activity2"], "programs": ["program1"], "books": ["Book by Author"] },
+      "goals": ["goal1", "goal2", "goal3"],
+      "monthly_focus": "",
+      "gpa_target": "",
+      "networking_tips": ""
     }
   },
   "universities": [
@@ -75,7 +87,7 @@ CRITICAL RULES:
       "avg_gpa": "3.7",
       "avg_sat": "1350",
       "notable_programs": "What makes this school special",
-      "application_tip": "Specific tip for this student"
+      "application_tip": "Specific tip"
     }
   ],
   "scholarships": [
@@ -119,7 +131,7 @@ CRITICAL RULES:
   ],
   "college_application_timeline": {
     "junior_year": ["Task with month"],
-    "summer_before_senior": ["Task with timeline"],
+    "summer_before_senior": ["Task"],
     "september": ["Task"],
     "october": ["Task"],
     "november": ["Task"],
@@ -130,43 +142,41 @@ CRITICAL RULES:
   }
 }
 
-Generate 3 career matches, 6 universities, 5 scholarships, 4 internships. Fill every array with detailed specific items.`
+Generate 3 career matches, 6 universities, 5 scholarships, 4 internships. Make everything specific to this student.`
 
-    const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+    const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': 'Bearer ' + process.env.GROQ_API_KEY,
+        'Authorization': 'Bearer ' + process.env.OPENROUTER_API_KEY,
+        'HTTP-Referer': 'https://pathwayiq-guneet.vercel.app',
+        'X-Title': 'PathwayIQ',
       },
       body: JSON.stringify({
-        model: 'llama-3.1-8b-instant',
+        model: 'meta-llama/llama-3.3-70b-instruct:free',
         messages: [{ role: 'user', content: prompt }],
         temperature: 0.7,
-        max_tokens: 6000,
+        max_tokens: 8000,
       }),
     })
 
     if (!response.ok) {
       const err = await response.text()
-      console.error('Groq error:', err)
-      return NextResponse.json({ success: false, error: 'Groq API failed' }, { status: 500 })
+      console.error('OpenRouter error:', err)
+      return NextResponse.json({ success: false, error: 'AI API failed' }, { status: 500 })
     }
 
     const data = await response.json()
-const text = data.choices[0].message.content
+    const text = data.choices[0].message.content
 
-// Extract JSON from response robustly
-let clean = text.replace(/```json/g, '').replace(/```/g, '').trim()
-
-// Find the first { and last } to extract pure JSON
-const firstBrace = clean.indexOf('{')
-const lastBrace = clean.lastIndexOf('}')
-if (firstBrace === -1 || lastBrace === -1) {
-  throw new Error('No valid JSON found in response')
-}
-clean = clean.slice(firstBrace, lastBrace + 1)
-
-const parsed = JSON.parse(clean)
+    let clean = text.replace(/```json/g, '').replace(/```/g, '').trim()
+    const firstBrace = clean.indexOf('{')
+    const lastBrace = clean.lastIndexOf('}')
+    if (firstBrace === -1 || lastBrace === -1) {
+      throw new Error('No valid JSON found in response')
+    }
+    clean = clean.slice(firstBrace, lastBrace + 1)
+    const parsed = JSON.parse(clean)
 
     return NextResponse.json({ success: true, data: parsed })
   } catch (error: any) {
