@@ -122,7 +122,7 @@ Make everything specific to this student. Generate 3 career matches, 6 universit
         model: 'llama-3.3-70b-versatile',
         messages: [{ role: 'user', content: prompt }],
         temperature: 0.7,
-        max_tokens: 4000,
+        max_tokens: 8000,
       }),
     })
 
