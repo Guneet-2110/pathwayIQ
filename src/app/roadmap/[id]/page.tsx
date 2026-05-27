@@ -1,5 +1,6 @@
 'use client'
 
+import ExportPDF from '@/components/ExportPDF'
 import { useEffect, useState } from 'react'
 import { useParams, useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase'
@@ -173,9 +174,16 @@ export default function RoadmapPage() {
           <a href="/dashboard" className="text-white/50 hover:text-white text-sm transition">My Roadmaps</a>
           <button onClick={() => router.push('/quiz')} className="bg-indigo-500 hover:bg-indigo-400 text-white text-sm font-semibold px-4 py-2 rounded-lg transition">Retake Quiz</button>
         </div>
+<div className="flex gap-4 items-center">
+  <a href="/dashboard" className="text-white/50 hover:text-white text-sm transition">My Roadmaps</a>
+  <ExportPDF roadmapTitle={roadmap.selected_career} />
+  <button onClick={() => router.push('/quiz')} className="bg-indigo-500 hover:bg-indigo-400 text-white text-sm font-semibold px-4 py-2 rounded-lg transition">Retake Quiz</button>
+</div>
+        
       </nav>
 
       <div className="max-w-7xl mx-auto px-4 py-10">
+        <div className="max-w-7xl mx-auto px-4 py-10" id="roadmap-content">
         <div className="mb-8">
           <p className="text-indigo-300 text-sm font-semibold uppercase tracking-widest mb-1">Your Roadmap</p>
           <h1 className="text-4xl font-extrabold">{roadmap.selected_career}</h1>
