@@ -1,4 +1,5 @@
 export const dynamic = 'force-dynamic'
+// v2 openrouter
 
 import { NextRequest, NextResponse } from 'next/server'
 
