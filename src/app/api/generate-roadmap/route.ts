@@ -139,7 +139,7 @@ Generate 3 career matches, 6 universities, 5 scholarships, 4 internships. Fill e
         'Authorization': 'Bearer ' + process.env.GROQ_API_KEY,
       },
       body: JSON.stringify({
-        model: 'llama-3.3-70b-versatile',
+        model: 'llama3-70b-8192',
         messages: [{ role: 'user', content: prompt }],
         temperature: 0.7,
         max_tokens: 8000,
