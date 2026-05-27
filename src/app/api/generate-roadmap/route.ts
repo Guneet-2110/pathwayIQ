@@ -1,23 +1,14 @@
 export const dynamic = 'force-dynamic'
 
-import { GoogleGenerativeAI } from '@google/generative-ai'
 import { NextRequest, NextResponse } from 'next/server'
-
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY!)
 
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json()
-    console.log('Received request body:', JSON.stringify(body).slice(0, 200))
-
     const { answers } = body
 
     if (!answers) {
       return NextResponse.json({ success: false, error: 'No answers provided' }, { status: 400 })
-    }
-
-    if (!process.env.GEMINI_API_KEY) {
-      return NextResponse.json({ success: false, error: 'Missing Gemini API key' }, { status: 500 })
     }
 
     const prompt = `
@@ -35,7 +26,7 @@ The JSON must follow this exact structure:
       "title": "Career Title",
       "fit_score": 92,
       "description": "2-3 sentence description of this career and why it fits this student",
-      "salary_range": "$X – $Y per year",
+      "salary_range": "$X - $Y per year",
       "growth_outlook": "High / Medium / Low"
     }
   ],
@@ -100,8 +91,8 @@ The JSON must follow this exact structure:
   ],
   "resources": {
     "books": ["Book Title by Author"],
-    "youtube_channels": ["Channel Name — what it covers"],
-    "online_courses": ["Course Name on Platform — brief description"]
+    "youtube_channels": ["Channel Name - what it covers"],
+    "online_courses": ["Course Name on Platform - brief description"]
   },
   "life_skills": {
     "time_management": "3-4 sentence personalized advice",
@@ -121,18 +112,34 @@ The JSON must follow this exact structure:
 Make everything specific to this student. Generate 3 career matches, 6 universities, 4 scholarships, 3 internships, and fill every year of the roadmap in detail.
 `
 
-    console.log('Calling Gemini API...')
-    const model = genAI.getGenerativeModel({ model: 'gemini-2.0-flash' })
-    const result = await model.generateContent(prompt)
-    const text = result.response.text()
-    console.log('Gemini response received, length:', text.length)
+    const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${process.env.GROQ_API_KEY}`,
+      },
+      body: JSON.stringify({
+        model: 'llama-3.3-70b-versatile',
+        messages: [{ role: 'user', content: prompt }],
+        temperature: 0.7,
+        max_tokens: 4000,
+      }),
+    })
 
+    if (!response.ok) {
+      const err = await response.text()
+      console.error('Groq error:', err)
+      return NextResponse.json({ success: false, error: 'Groq API failed' }, { status: 500 })
+    }
+
+    const data = await response.json()
+    const text = data.choices[0].message.content
     const clean = text.replace(/```json|```/g, '').trim()
     const parsed = JSON.parse(clean)
 
     return NextResponse.json({ success: true, data: parsed })
   } catch (error: any) {
-    console.error('Gemini error:', error)
+    console.error('Generation error:', error)
     return NextResponse.json(
       { success: false, error: error.message || 'Failed to generate roadmap' },
       { status: 500 }
