@@ -153,9 +153,20 @@ Generate 3 career matches, 6 universities, 5 scholarships, 4 internships. Fill e
     }
 
     const data = await response.json()
-    const text = data.choices[0].message.content
-    const clean = text.replace(/```json/g, '').replace(/```/g, '').trim()
-    const parsed = JSON.parse(clean)
+const text = data.choices[0].message.content
+
+// Extract JSON from response robustly
+let clean = text.replace(/```json/g, '').replace(/```/g, '').trim()
+
+// Find the first { and last } to extract pure JSON
+const firstBrace = clean.indexOf('{')
+const lastBrace = clean.lastIndexOf('}')
+if (firstBrace === -1 || lastBrace === -1) {
+  throw new Error('No valid JSON found in response')
+}
+clean = clean.slice(firstBrace, lastBrace + 1)
+
+const parsed = JSON.parse(clean)
 
     return NextResponse.json({ success: true, data: parsed })
   } catch (error: any) {
