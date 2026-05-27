@@ -1,11 +1,11 @@
 'use client'
 
-import ExportPDF from '@/components/ExportPDF'
 import { useEffect, useState } from 'react'
 import { useParams, useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase'
 import ChecklistItem from '@/components/ChecklistItem'
 import ProgressBar from '@/components/ProgressBar'
+import ExportPDF from '@/components/ExportPDF'
 
 const tabs = ['Overview', 'Freshman', 'Sophomore', 'Junior', 'Senior', 'Universities', 'Scholarships', 'Internships', 'Resources', 'Life Skills', 'Tests', 'App Timeline']
 
@@ -167,23 +167,15 @@ export default function RoadmapPage() {
   return (
     <main className="min-h-screen bg-gradient-to-br from-indigo-950 via-purple-950 to-slate-900 text-white">
       <nav className="flex items-center justify-between px-8 py-6 max-w-7xl mx-auto border-b border-white/10">
-        <a href="/" className="text-xl font-bold tracking-tight">
-          Pathway<span className="text-indigo-400">IQ</span>
-        </a>
+        <a href="/" className="text-xl font-bold tracking-tight">Pathway<span className="text-indigo-400">IQ</span></a>
         <div className="flex gap-4 items-center">
           <a href="/dashboard" className="text-white/50 hover:text-white text-sm transition">My Roadmaps</a>
+          <ExportPDF roadmapTitle={roadmap.selected_career} />
           <button onClick={() => router.push('/quiz')} className="bg-indigo-500 hover:bg-indigo-400 text-white text-sm font-semibold px-4 py-2 rounded-lg transition">Retake Quiz</button>
         </div>
-<div className="flex gap-4 items-center">
-  <a href="/dashboard" className="text-white/50 hover:text-white text-sm transition">My Roadmaps</a>
-  <ExportPDF roadmapTitle={roadmap.selected_career} />
-  <button onClick={() => router.push('/quiz')} className="bg-indigo-500 hover:bg-indigo-400 text-white text-sm font-semibold px-4 py-2 rounded-lg transition">Retake Quiz</button>
-</div>
-        
       </nav>
 
-      <div className="max-w-7xl mx-auto px-4 py-10">
-        <div className="max-w-7xl mx-auto px-4 py-10" id="roadmap-content">
+      <div className="max-w-7xl mx-auto px-4 py-10" id="roadmap-content">
         <div className="mb-8">
           <p className="text-indigo-300 text-sm font-semibold uppercase tracking-widest mb-1">Your Roadmap</p>
           <h1 className="text-4xl font-extrabold">{roadmap.selected_career}</h1>
@@ -196,11 +188,7 @@ export default function RoadmapPage() {
             <button
               key={tab}
               onClick={() => setActiveTab(tab)}
-              className={`px-4 py-2 rounded-lg text-sm font-medium transition ${
-                activeTab === tab
-                  ? 'bg-indigo-500 text-white'
-                  : 'bg-white/5 text-white/50 hover:bg-white/10 hover:text-white'
-              }`}
+              className={`px-4 py-2 rounded-lg text-sm font-medium transition ${activeTab === tab ? 'bg-indigo-500 text-white' : 'bg-white/5 text-white/50 hover:bg-white/10 hover:text-white'}`}
             >
               {tab}
             </button>
@@ -235,9 +223,7 @@ export default function RoadmapPage() {
                       <span className="text-white/70">{c.growth_outlook}</span>
                     </div>
                   </div>
-                  {c.biggest_challenges && (
-                    <p className="text-white/30 text-xs mt-3 leading-relaxed">⚠️ {c.biggest_challenges}</p>
-                  )}
+                  {c.biggest_challenges && <p className="text-white/30 text-xs mt-3 leading-relaxed">⚠️ {c.biggest_challenges}</p>}
                 </div>
               ))}
             </div>
@@ -372,9 +358,7 @@ export default function RoadmapPage() {
             <div className="flex flex-col gap-6">
               {plan.college_application_timeline && Object.entries(plan.college_application_timeline).map(([month, tasks]: [string, any]) => (
                 <div key={month} className="bg-white/5 border border-white/10 rounded-2xl p-6">
-                  <h3 className="font-bold text-lg mb-4 capitalize text-indigo-300">
-                    {month.replace(/_/g, ' ')}
-                  </h3>
+                  <h3 className="font-bold text-lg mb-4 capitalize text-indigo-300">{month.replace(/_/g, ' ')}</h3>
                   <ul className="flex flex-col gap-2">
                     {tasks?.map((task: string, i: number) => (
                       <ChecklistItem
