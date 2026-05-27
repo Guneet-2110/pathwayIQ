@@ -25,13 +25,14 @@ function ResultsContent() {
       try {
         const answers = JSON.parse(answersRaw)
         const res = await fetch('/api/generate-roadmap', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ answers }),
-        })
-        const json = await res.json()
-        if (!json.success) throw new Error(json.error)
-        setData(json.data)
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify({ answers }),
+})
+const json = await res.json()
+console.log('API response:', json)
+if (!json.success) throw new Error(json.error)
+setData(json.data)
       } catch (e) {
         setError('Failed to generate your roadmap. Please try again.')
       } finally {
