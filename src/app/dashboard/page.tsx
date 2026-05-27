@@ -57,7 +57,8 @@ export default function DashboardPage() {
     Pathway<span className="text-indigo-400">IQ</span>
   </a>
   <div className="flex gap-4 items-center">
-    <a href="/profile" className="text-white/50 hover:text-white text-sm transition">Profile</a>
+    <a href="/compare" className="text-white/50 hover:text-white text-sm transition">Compare</a>
+<a href="/profile" className="text-white/50 hover:text-white text-sm transition">Profile</a>
     <button onClick={handleLogout} className="text-white/50 hover:text-white text-sm transition">Log out</button>
   </div>
 </nav>
