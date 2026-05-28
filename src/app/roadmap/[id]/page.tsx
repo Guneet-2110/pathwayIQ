@@ -408,7 +408,6 @@ export default function RoadmapPage() {
               })()}
             </div>
           )}
-          )}
         </div>
       </div>
     </main>
