@@ -44,10 +44,13 @@ export default function ProfilePage() {
     setSaving(true)
     setSaved(false)
 
-    await supabase
+    const { error } = await supabase
       .from('profiles')
-      .update({ name, grade })
-      .eq('user_id', user.id)
+      .upsert({ user_id: user.id, name, grade }, { onConflict: 'user_id' })
+
+    if (error) {
+      console.error('Save error:', error)
+    }
 
     setSaving(false)
     setSaved(true)
@@ -116,6 +119,7 @@ export default function ProfilePage() {
               className="w-full bg-white/10 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-indigo-400 transition"
             >
               <option value="" className="bg-slate-900">Select grade</option>
+              <option value="7" className="bg-slate-900">7th Grade or below</option>
               <option value="8" className="bg-slate-900">8th Grade (incoming freshman)</option>
               <option value="9" className="bg-slate-900">9th Grade (Freshman)</option>
               <option value="10" className="bg-slate-900">10th Grade (Sophomore)</option>
