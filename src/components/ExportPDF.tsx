@@ -9,47 +9,28 @@ interface Props {
 export default function ExportPDF({ roadmapTitle }: Props) {
   const [exporting, setExporting] = useState(false)
 
-  async function handleExport() {
+  function handleExport() {
     setExporting(true)
-    try {
-      const { default: jsPDF } = await import('jspdf')
-      const { default: html2canvas } = await import('html2canvas')
-
-      const element = document.getElementById('roadmap-content')
-      if (!element) return
-
-      const canvas = await html2canvas(element, {
-        scale: 2,
-        useCORS: true,
-        backgroundColor: '#1e1b4b',
-      })
-
-      const imgData = canvas.toDataURL('image/png')
-      const pdf = new jsPDF({
-        orientation: 'portrait',
-        unit: 'mm',
-        format: 'a4',
-      })
-
-      const pdfWidth = pdf.internal.pageSize.getWidth()
-      const pdfHeight = pdf.internal.pageSize.getHeight()
-      const imgWidth = canvas.width
-      const imgHeight = canvas.height
-      const ratio = Math.min(pdfWidth / imgWidth, pdfHeight / imgHeight)
-      const imgX = (pdfWidth - imgWidth * ratio) / 2
-      const totalPages = Math.ceil((imgHeight * ratio) / pdfHeight)
-
-      for (let page = 0; page < totalPages; page++) {
-        if (page > 0) pdf.addPage()
-        pdf.addImage(imgData, 'PNG', imgX, -(page * pdfHeight), imgWidth * ratio, imgHeight * ratio)
+    const style = document.createElement('style')
+    style.id = 'print-style'
+    style.innerHTML = `
+      @media print {
+        body > *:not(#roadmap-print-wrapper) { display: none !important; }
+        #roadmap-print-wrapper { display: block !important; }
+        nav { display: none !important; }
+        button { display: none !important; }
+        .no-print { display: none !important; }
+        body { background: white !important; color: black !important; }
+        * { color: black !important; background: white !important; border-color: #ccc !important; }
       }
-
-      pdf.save(`${roadmapTitle.replace(/\s+/g, '-')}-PathwayIQ.pdf`)
-    } catch (err) {
-      console.error('PDF export error:', err)
-    } finally {
+    `
+    document.head.appendChild(style)
+    document.title = `${roadmapTitle} - PathwayIQ`
+    window.print()
+    setTimeout(() => {
+      document.head.removeChild(style)
       setExporting(false)
-    }
+    }, 1000)
   }
 
   return (
