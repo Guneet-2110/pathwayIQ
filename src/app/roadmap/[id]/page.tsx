@@ -356,24 +356,48 @@ export default function RoadmapPage() {
 
           {activeTab === 'App Timeline' && (
             <div className="flex flex-col gap-6">
-              {plan.college_application_timeline && Object.entries(plan.college_application_timeline).map(([month, tasks]: [string, any]) => (
-                <div key={month} className="bg-white/5 border border-white/10 rounded-2xl p-6">
-                  <h3 className="font-bold text-lg mb-4 capitalize text-indigo-300">{month.replace(/_/g, ' ')}</h3>
-                  <ul className="flex flex-col gap-2">
-                    {tasks?.map((task: string, i: number) => (
-                      <ChecklistItem
-                        key={i}
-                        label={task}
-                        itemKey={`timeline-${month}-${i}`}
-                        roadmapId={id as string}
-                        userId={userId}
-                        initialChecked={progress[`timeline-${month}-${i}`] || false}
-                      />
-                    ))}
-                  </ul>
-                </div>
-              ))}
+              <div className="bg-indigo-500/10 border border-indigo-400/20 rounded-2xl p-4 mb-2">
+                <p className="text-indigo-300 text-sm font-semibold mb-1">📅 College Application Timeline</p>
+                <p className="text-white/50 text-xs">Follow this checklist from junior year through senior year. Check off each task as you complete it.</p>
+              </div>
+              {plan.college_application_timeline && (() => {
+                const order = ['junior_year', 'summer_before_senior', 'september', 'october', 'november', 'december', 'january', 'february_march', 'april_may']
+                const timeline = plan.college_application_timeline
+                return order.map((month) => {
+                  const tasks = timeline[month]
+                  if (!tasks?.length) return null
+                  const labels: Record<string, string> = {
+                    junior_year: '📚 Junior Year',
+                    summer_before_senior: '☀️ Summer Before Senior Year',
+                    september: '🍂 September',
+                    october: '🍁 October',
+                    november: '❄️ November',
+                    december: '🎄 December',
+                    january: '🎉 January',
+                    february_march: '💐 February & March',
+                    april_may: '🌸 April & May',
+                  }
+                  return (
+                    <div key={month} className="bg-white/5 border border-white/10 rounded-2xl p-6">
+                      <h3 className="font-bold text-lg mb-4 text-indigo-300">{labels[month] || month.replace(/_/g, ' ')}</h3>
+                      <ul className="flex flex-col gap-2">
+                        {tasks?.map((task: string, i: number) => (
+                          <ChecklistItem
+                            key={i}
+                            label={task}
+                            itemKey={`timeline-${month}-${i}`}
+                            roadmapId={id as string}
+                            userId={userId}
+                            initialChecked={progress[`timeline-${month}-${i}`] || false}
+                          />
+                        ))}
+                      </ul>
+                    </div>
+                  )
+                })
+              })()}
             </div>
+          )}
           )}
         </div>
       </div>
