@@ -221,8 +221,20 @@ export default function QuizPage() {
           )}
         </div>
 
-        {/* Next button */}
-        <div className="flex justify-end mt-6">
+        {/* Navigation buttons */}
+        <div className="flex justify-between mt-6">
+          <button
+            onClick={() => {
+              if (current > 0) {
+                setCurrent((prev) => prev - 1)
+                setTextInput('')
+              }
+            }}
+            disabled={current === 0}
+            className="bg-white/5 hover:bg-white/10 disabled:opacity-0 text-white font-semibold px-8 py-3 rounded-xl transition"
+          >
+            ← Back
+          </button>
           <button
             onClick={handleNext}
             disabled={!isAnswered() || loading}
