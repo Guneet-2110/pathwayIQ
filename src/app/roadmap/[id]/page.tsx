@@ -268,7 +268,12 @@ export default function RoadmapPage() {
                   {s.how_to_stand_out && <p className="text-indigo-300/60 text-xs mb-3">💡 {s.how_to_stand_out}</p>}
                   <div className="flex justify-between text-sm">
                     <span className="text-white/40">Deadline: <span className="text-white/70">{s.deadline}</span></span>
-                    {s.link && s.link !== 'N/A' && (<a href={s.link} target="_blank" rel="noopener noreferrer" className="text-indigo-400 hover:underline">Apply →</a>)}
+{s.link && s.link !== 'N/A' && s.link !== 'https://fastweb.com' && (
+  <a href={s.link} target="_blank" rel="noopener noreferrer" className="text-indigo-400 hover:underline">Apply →</a>
+)}
+{(!s.link || s.link === 'N/A' || s.link === 'https://fastweb.com') && (
+  <a href={`https://www.google.com/search?q=${encodeURIComponent(s.name + ' scholarship apply')}`} target="_blank" rel="noopener noreferrer" className="text-indigo-400 hover:underline">Search →</a>
+)}
                   </div>
                 </div>
               ))}
