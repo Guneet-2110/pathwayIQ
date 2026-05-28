@@ -154,7 +154,7 @@ Generate 3 career matches, 6 universities, 5 scholarships, 4 internships. Make e
         'X-Title': 'PathwayIQ',
       },
       body: JSON.stringify({
-        model: 'deepseek/deepseek-r1-0528:free',
+        model: 'openrouter/auto',
         messages: [{ role: 'user', content: prompt }],
         temperature: 0.7,
         max_tokens: 8000,
