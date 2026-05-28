@@ -12,7 +12,14 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ success: false, error: 'No answers provided' }, { status: 400 })
     }
 
-    const prompt = `You are a world-class high school career counselor and college advisor. Based on the following student quiz answers, generate an extremely detailed, personalized career roadmap.
+    const prompt = `You are a world-class high school career counselor and college advisor. Based on the following student quiz answers, generate an extremely detailed, personalized career roadmap. CRITICAL RULES:
+- Every piece of advice must be specific to THIS student's grade, location, interests, GPA, and career goals
+- LOCATION IS CRITICAL: The student's country and region must determine universities, scholarships, and internships. If the student is in China, recommend Chinese universities (Tsinghua, Peking University, Fudan etc), Chinese scholarships, and opportunities available in China. If in India, recommend Indian universities (IITs, NITs etc). If in Canada, recommend Canadian universities. If in UK, recommend UK universities. NEVER recommend US-specific scholarships or universities to students outside the USA unless they explicitly want to study abroad.
+- SCHOLARSHIPS must match the student's nationality and location. Never recommend Hispanic scholarships to non-Hispanic students. Never recommend US federal aid to non-US students.
+- For internship and scholarship links, ONLY use real well-known URLs that definitely exist for that country. Do NOT make up specific URLs.
+- Life skills advice must directly reference the student's specific career path
+- Every year of the roadmap must have at least 4 items in each array
+- If the student mentions wanting to study abroad, include international options alongside local ones
 
 STUDENT ANSWERS:
 ${JSON.stringify(answers, null, 2)}
