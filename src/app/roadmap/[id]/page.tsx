@@ -292,7 +292,12 @@ export default function RoadmapPage() {
                   {item.how_to_apply && <p className="text-indigo-300/60 text-xs mb-3">💡 {item.how_to_apply}</p>}
                   <div className="flex justify-between text-sm">
                     <span className="text-white/40">Grade: <span className="text-white/70">{item.grade_level}</span></span>
-                    {item.link && item.link !== 'N/A' && (<a href={item.link} target="_blank" rel="noopener noreferrer" className="text-indigo-400 hover:underline">Learn More →</a>)}
+{item.link && item.link !== 'N/A' && item.link !== 'https://indeed.com' && (
+  <a href={item.link} target="_blank" rel="noopener noreferrer" className="text-indigo-400 hover:underline">Learn More →</a>
+)}
+{(!item.link || item.link === 'N/A' || item.link === 'https://indeed.com') && (
+  <a href={`https://www.google.com/search?q=${encodeURIComponent(item.name + ' internship apply')}`} target="_blank" rel="noopener noreferrer" className="text-indigo-400 hover:underline">Search →</a>
+)}
                   </div>
                 </div>
               ))}
