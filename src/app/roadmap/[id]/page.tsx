@@ -5,10 +5,9 @@ import { useParams, useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase'
 import ChecklistItem from '@/components/ChecklistItem'
 import ProgressBar from '@/components/ProgressBar'
-import ExportPDF from '@/components/ExportPDF'
+import ShareRoadmap from '@/components/ShareRoadmap'
 
-const tabs = ['Overview', 'Freshman', 'Sophomore', 'Junior', 'Senior', 'Universities', 'Scholarships', 'Internships', 'Resources', 'Life Skills', 'Tests', 'App Timeline']
-
+const tabs = ['Overview', 'Freshman', 'Sophomore', 'Junior', 'Senior', 'Universities', 'Scholarships', 'Internships', 'Resources', 'Life Skills', 'Tests', 'App Timeline', 'Essay Ideas', 'Interview Prep', 'Financial Aid']
 function Section({ title, items, card, checklist, roadmapId, userId, progress }: {
   title: string
   items: string[]
@@ -170,7 +169,7 @@ export default function RoadmapPage() {
         <a href="/" className="text-xl font-bold tracking-tight">Pathway<span className="text-indigo-400">IQ</span></a>
         <div className="flex gap-4 items-center">
           <a href="/dashboard" className="text-white/50 hover:text-white text-sm transition">My Roadmaps</a>
-          <ExportPDF roadmapTitle={roadmap.selected_career} />
+          <ShareRoadmap roadmapId={id as string} roadmapTitle={roadmap.selected_career} />
           <button onClick={() => router.push('/quiz')} className="bg-indigo-500 hover:bg-indigo-400 text-white text-sm font-semibold px-4 py-2 rounded-lg transition">Retake Quiz</button>
         </div>
       </nav>
