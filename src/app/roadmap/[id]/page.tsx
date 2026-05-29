@@ -87,6 +87,401 @@ function YearTab({ data, roadmapId, userId, progress }: {
     </div>
   )
 }
+function EssayTab({ roadmap }: { roadmap: any }) {
+  const [data, setData] = useState<any>(null)
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState('')
+
+  async function generate() {
+    setLoading(true)
+    setError('')
+    try {
+      const res = await fetch('/api/generate-essays', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ roadmap: {
+          selected_career: roadmap.selected_career,
+          career_matches: roadmap.full_plan?.career_matches,
+        }}),
+      })
+      const json = await res.json()
+      if (!json.success) throw new Error(json.error)
+      setData(json.data)
+    } catch (e: any) {
+      setError(e.message || 'Failed to generate essay ideas')
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  if (!data && !loading) {
+    return (
+      <div className="bg-white/5 border border-white/10 rounded-2xl p-12 text-center">
+        <p className="text-4xl mb-4">✍️</p>
+        <h2 className="text-xl font-semibold mb-2">College Essay Brainstormer</h2>
+        <p className="text-white/40 text-sm mb-6 max-w-md mx-auto">
+          Get 5 personalized college essay angles based on your career path and story. Each comes with a hook, outline, and tips.
+        </p>
+        <button
+          onClick={generate}
+          className="bg-indigo-500 hover:bg-indigo-400 text-white font-semibold px-6 py-3 rounded-lg transition"
+        >
+          Generate My Essay Ideas →
+        </button>
+      </div>
+    )
+  }
+
+  if (loading) {
+    return (
+      <div className="flex flex-col items-center justify-center py-24 gap-4">
+        <div className="w-12 h-12 border-4 border-indigo-400 border-t-transparent rounded-full animate-spin" />
+        <p className="text-white/40 text-sm">Crafting your essay angles...</p>
+      </div>
+    )
+  }
+
+  if (error) {
+    return (
+      <div className="text-center py-12">
+        <p className="text-red-400 mb-4">{error}</p>
+        <button onClick={generate} className="bg-indigo-500 hover:bg-indigo-400 text-white px-6 py-3 rounded-lg transition">Try Again</button>
+      </div>
+    )
+  }
+
+  return (
+    <div className="flex flex-col gap-6">
+      <div className="bg-indigo-500/10 border border-indigo-400/20 rounded-2xl p-4">
+        <p className="text-indigo-300 text-sm font-semibold">✍️ Your Personalized Essay Angles</p>
+        <p className="text-white/40 text-xs mt-1">5 unique angles based on your career path. Use these as starting points — make them your own.</p>
+      </div>
+      {data?.essays?.map((essay: any, i: number) => (
+        <div key={i} className="bg-white/5 border border-white/10 rounded-2xl p-6">
+          <div className="flex justify-between items-start mb-3">
+            <h3 className="font-bold text-lg">{essay.angle}</h3>
+            <span className="bg-indigo-500/20 text-indigo-300 text-xs px-2 py-1 rounded-full shrink-0 ml-2">Prompt #{essay.prompt_match}</span>
+          </div>
+          <div className="bg-white/5 rounded-lg p-3 mb-4">
+            <p className="text-indigo-300 text-xs font-semibold mb-1">Opening Hook</p>
+            <p className="text-white/70 text-sm italic">"{essay.hook}"</p>
+          </div>
+          <p className="text-white/60 text-sm mb-4 leading-relaxed">{essay.core_story}</p>
+          <p className="text-green-300/70 text-xs mb-4">💡 {essay.why_powerful}</p>
+          <div className="grid md:grid-cols-2 gap-4">
+            <div>
+              <p className="text-white/40 text-xs uppercase tracking-wider mb-2">What to Include</p>
+              <ul className="flex flex-col gap-1">
+                {essay.what_to_include?.map((item: string, j: number) => (
+                  <li key={j} className="text-white/60 text-xs flex gap-2">
+                    <span className="text-indigo-400">→</span>{item}
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <div>
+              <p className="text-white/40 text-xs uppercase tracking-wider mb-2">Avoid</p>
+              <p className="text-red-400/60 text-xs">⚠️ {essay.avoid}</p>
+            </div>
+          </div>
+        </div>
+      ))}
+      <button
+        onClick={generate}
+        className="bg-white/5 hover:bg-white/10 text-white/50 hover:text-white text-sm font-semibold px-6 py-3 rounded-lg transition self-start"
+      >
+        Regenerate Ideas
+      </button>
+    </div>
+  )
+}
+
+function InterviewTab({ career }: { career: string }) {
+  const [data, setData] = useState<any>(null)
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState('')
+  const [expanded, setExpanded] = useState<number | null>(null)
+
+  async function generate() {
+    setLoading(true)
+    setError('')
+    try {
+      const res = await fetch('/api/generate-interview', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ career }),
+      })
+      const json = await res.json()
+      if (!json.success) throw new Error(json.error)
+      setData(json.data)
+    } catch (e: any) {
+      setError(e.message || 'Failed to generate interview prep')
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  if (!data && !loading) {
+    return (
+      <div className="bg-white/5 border border-white/10 rounded-2xl p-12 text-center">
+        <p className="text-4xl mb-4">🎤</p>
+        <h2 className="text-xl font-semibold mb-2">Interview Prep</h2>
+        <p className="text-white/40 text-sm mb-6 max-w-md mx-auto">
+          Get real interview questions for {career} roles with sample answers and tips tailored for high schoolers.
+        </p>
+        <button
+          onClick={generate}
+          className="bg-indigo-500 hover:bg-indigo-400 text-white font-semibold px-6 py-3 rounded-lg transition"
+        >
+          Generate Interview Prep →
+        </button>
+      </div>
+    )
+  }
+
+  if (loading) {
+    return (
+      <div className="flex flex-col items-center justify-center py-24 gap-4">
+        <div className="w-12 h-12 border-4 border-indigo-400 border-t-transparent rounded-full animate-spin" />
+        <p className="text-white/40 text-sm">Preparing your interview questions...</p>
+      </div>
+    )
+  }
+
+  if (error) {
+    return (
+      <div className="text-center py-12">
+        <p className="text-red-400 mb-4">{error}</p>
+        <button onClick={generate} className="bg-indigo-500 hover:bg-indigo-400 text-white px-6 py-3 rounded-lg transition">Try Again</button>
+      </div>
+    )
+  }
+
+  return (
+    <div className="flex flex-col gap-6">
+      <div className="bg-indigo-500/10 border border-indigo-400/20 rounded-2xl p-4">
+        <p className="text-indigo-300 text-sm font-semibold">🎤 Interview Prep for {career}</p>
+        <p className="text-white/50 text-sm mt-1">{data?.intro}</p>
+      </div>
+
+      <div className="grid md:grid-cols-2 gap-6">
+        <div className="bg-white/5 border border-white/10 rounded-2xl p-6">
+          <h3 className="font-semibold mb-4 text-green-300">✅ Do</h3>
+          <ul className="flex flex-col gap-2">
+            {data?.dos?.map((item: string, i: number) => (
+              <li key={i} className="text-sm text-white/70 flex gap-2">
+                <span className="text-green-400 shrink-0">→</span>{item}
+              </li>
+            ))}
+          </ul>
+        </div>
+        <div className="bg-white/5 border border-white/10 rounded-2xl p-6">
+          <h3 className="font-semibold mb-4 text-red-300">❌ Don't</h3>
+          <ul className="flex flex-col gap-2">
+            {data?.donts?.map((item: string, i: number) => (
+              <li key={i} className="text-sm text-white/70 flex gap-2">
+                <span className="text-red-400 shrink-0">→</span>{item}
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+
+      <h3 className="font-bold text-lg">Common Questions</h3>
+      <div className="flex flex-col gap-4">
+        {data?.questions?.map((q: any, i: number) => (
+          <div key={i} className="bg-white/5 border border-white/10 rounded-2xl p-6">
+            <div
+              className="flex justify-between items-start cursor-pointer"
+              onClick={() => setExpanded(expanded === i ? null : i)}
+            >
+              <div className="flex-1 pr-4">
+                <span className="bg-purple-500/20 text-purple-300 text-xs px-2 py-0.5 rounded-full mr-2">{q.category}</span>
+                <p className="font-semibold mt-2">{q.question}</p>
+              </div>
+              <span className="text-white/40 text-lg">{expanded === i ? '−' : '+'}</span>
+            </div>
+            {expanded === i && (
+              <div className="mt-4 flex flex-col gap-3 border-t border-white/10 pt-4">
+                <div>
+                  <p className="text-white/40 text-xs uppercase tracking-wider mb-1">Why They Ask This</p>
+                  <p className="text-white/60 text-sm">{q.why_asked}</p>
+                </div>
+                <div>
+                  <p className="text-white/40 text-xs uppercase tracking-wider mb-1">Sample Answer</p>
+                  <p className="text-white/70 text-sm leading-relaxed italic">"{q.sample_answer}"</p>
+                </div>
+                <div className="bg-indigo-500/10 rounded-lg p-3">
+                  <p className="text-indigo-300 text-xs">💡 {q.tips}</p>
+                </div>
+              </div>
+            )}
+          </div>
+        ))}
+      </div>
+
+      <div className="bg-white/5 border border-white/10 rounded-2xl p-6">
+        <h3 className="font-semibold mb-4">📋 Prep Checklist</h3>
+        <ul className="flex flex-col gap-2">
+          {data?.prep_checklist?.map((item: string, i: number) => (
+            <li key={i} className="text-sm text-white/70 flex gap-2">
+              <span className="text-indigo-400">→</span>{item}
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      <button
+        onClick={generate}
+        className="bg-white/5 hover:bg-white/10 text-white/50 hover:text-white text-sm font-semibold px-6 py-3 rounded-lg transition self-start"
+      >
+        Regenerate Questions
+      </button>
+    </div>
+  )
+}
+
+function FinancialTab({ universities, career, location }: { universities: any[], career: string, location: string }) {
+  const [data, setData] = useState<any>(null)
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState('')
+
+  async function generate() {
+    setLoading(true)
+    setError('')
+    try {
+      const res = await fetch('/api/generate-financial', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ universities, career, location }),
+      })
+      const json = await res.json()
+      if (!json.success) throw new Error(json.error)
+      setData(json.data)
+    } catch (e: any) {
+      setError(e.message || 'Failed to generate financial aid info')
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  if (!data && !loading) {
+    return (
+      <div className="bg-white/5 border border-white/10 rounded-2xl p-12 text-center">
+        <p className="text-4xl mb-4">💰</p>
+        <h2 className="text-xl font-semibold mb-2">Financial Aid Estimator</h2>
+        <p className="text-white/40 text-sm mb-6 max-w-md mx-auto">
+          Get estimated costs, financial aid options, and a timeline for your target universities based on your career path.
+        </p>
+        <button
+          onClick={generate}
+          className="bg-indigo-500 hover:bg-indigo-400 text-white font-semibold px-6 py-3 rounded-lg transition"
+        >
+          Generate Financial Aid Info →
+        </button>
+      </div>
+    )
+  }
+
+  if (loading) {
+    return (
+      <div className="flex flex-col items-center justify-center py-24 gap-4">
+        <div className="w-12 h-12 border-4 border-indigo-400 border-t-transparent rounded-full animate-spin" />
+        <p className="text-white/40 text-sm">Calculating your financial aid options...</p>
+      </div>
+    )
+  }
+
+  if (error) {
+    return (
+      <div className="text-center py-12">
+        <p className="text-red-400 mb-4">{error}</p>
+        <button onClick={generate} className="bg-indigo-500 hover:bg-indigo-400 text-white px-6 py-3 rounded-lg transition">Try Again</button>
+      </div>
+    )
+  }
+
+  return (
+    <div className="flex flex-col gap-6">
+      <div className="bg-indigo-500/10 border border-indigo-400/20 rounded-2xl p-4">
+        <p className="text-indigo-300 text-sm font-semibold">💰 Financial Aid Overview</p>
+        <p className="text-white/60 text-sm mt-2 leading-relaxed">{data?.overview}</p>
+      </div>
+
+      {data?.roi && (
+        <div className="bg-green-500/10 border border-green-400/20 rounded-2xl p-4">
+          <p className="text-green-300 text-sm font-semibold mb-1">📈 Return on Investment</p>
+          <p className="text-white/60 text-sm leading-relaxed">{data.roi}</p>
+        </div>
+      )}
+
+      <h3 className="font-bold text-lg">University Cost Breakdown</h3>
+      <div className="grid md:grid-cols-2 gap-6">
+        {data?.universities?.map((u: any, i: number) => (
+          <div key={i} className="bg-white/5 border border-white/10 rounded-2xl p-6">
+            <h3 className="font-bold mb-3">{u.name}</h3>
+            <div className="flex flex-col gap-2 text-sm mb-3">
+              <div className="flex justify-between">
+                <span className="text-white/40">Annual Cost</span>
+                <span className="text-white/70">{u.estimated_annual_cost}</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-white/40">Net Cost (after aid)</span>
+                <span className="text-green-300">{u.net_cost_estimate}</span>
+              </div>
+            </div>
+            <p className="text-white/50 text-xs mb-2">{u.typical_aid}</p>
+            <p className="text-indigo-300/60 text-xs">💡 {u.financial_tip}</p>
+          </div>
+        ))}
+      </div>
+
+      <h3 className="font-bold text-lg">Types of Aid</h3>
+      <div className="grid md:grid-cols-2 gap-6">
+        {data?.aid_types?.map((aid: any, i: number) => (
+          <div key={i} className="bg-white/5 border border-white/10 rounded-2xl p-6">
+            <span className="bg-yellow-500/20 text-yellow-300 text-xs px-2 py-0.5 rounded-full">{aid.type}</span>
+            <p className="text-white/60 text-sm mt-3 mb-2">{aid.description}</p>
+            <p className="text-indigo-300/60 text-xs">💡 {aid.how_to_maximize}</p>
+          </div>
+        ))}
+      </div>
+
+      <h3 className="font-bold text-lg">Financial Aid Timeline</h3>
+      <div className="flex flex-col gap-4">
+        {data?.timeline?.map((item: any, i: number) => (
+          <div key={i} className="bg-white/5 border border-white/10 rounded-2xl p-4 flex gap-4">
+            <div className="bg-indigo-500/20 text-indigo-300 text-xs font-semibold px-3 py-1 rounded-lg shrink-0 h-fit">
+              {item.when}
+            </div>
+            <div>
+              <p className="text-white/80 text-sm font-semibold">{item.action}</p>
+              <p className="text-white/40 text-xs mt-1">{item.why}</p>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      <div className="bg-white/5 border border-white/10 rounded-2xl p-6">
+        <h3 className="font-semibold mb-4">💡 Money Saving Tips</h3>
+        <ul className="flex flex-col gap-2">
+          {data?.tips?.map((tip: string, i: number) => (
+            <li key={i} className="text-sm text-white/70 flex gap-2">
+              <span className="text-yellow-400">→</span>{tip}
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      <button
+        onClick={generate}
+        className="bg-white/5 hover:bg-white/10 text-white/50 hover:text-white text-sm font-semibold px-6 py-3 rounded-lg transition self-start"
+      >
+        Regenerate
+      </button>
+    </div>
+  )
+}
 
 export default function RoadmapPage() {
   const { id } = useParams()
@@ -361,6 +756,22 @@ export default function RoadmapPage() {
                 </div>
               ))}
             </div>
+          )}
+
+          {activeTab === 'Essay Ideas' && (
+            <EssayTab roadmap={roadmap} />
+          )}
+
+          {activeTab === 'Interview Prep' && (
+            <InterviewTab career={roadmap.selected_career} />
+          )}
+
+          {activeTab === 'Financial Aid' && (
+            <FinancialTab
+              universities={plan.universities}
+              career={roadmap.selected_career}
+              location={plan.roadmap?.freshman?.courses?.[0] || ''}
+            />
           )}
 
           {activeTab === 'App Timeline' && (
