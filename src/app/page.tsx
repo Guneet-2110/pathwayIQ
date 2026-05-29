@@ -7,6 +7,7 @@ export default function LandingPage() {
           Pathway<span className="text-indigo-400">IQ</span>
         </span>
         <div className="flex gap-4">
+          <a href="/pricing" className="px-4 py-2 text-sm text-white/70 hover:text-white transition">Pricing</a>
           <a href="/login" className="px-4 py-2 text-sm text-white/70 hover:text-white transition">Log in</a>
           <a href="/signup" className="px-4 py-2 text-sm bg-indigo-500 hover:bg-indigo-400 rounded-lg transition font-medium">Get Started Free</a>
         </div>
@@ -119,6 +120,7 @@ export default function LandingPage() {
         <div className="flex gap-6 text-white/40 text-sm">
           <a href="/signup" className="hover:text-white transition">Sign Up</a>
           <a href="/login" className="hover:text-white transition">Log In</a>
+          <a href="/pricing" className="hover:text-white transition">Pricing</a>
           <a href="/compare" className="hover:text-white transition">Compare</a>
         </div>
       </footer>
