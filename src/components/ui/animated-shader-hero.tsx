@@ -117,8 +117,7 @@ const Hero: React.FC<HeroProps> = ({ trustBadge, headline, subtitle, buttons, cl
   const canvasRef = useShaderBackground()
 
   return (
-    <div className={`relative w-full h-screen overflow-hidden bg-black ${className}`}>
-      <style>{`
+<div className={`relative w-full h-screen overflow-hidden bg-black ${className}`} style={{maskImage: 'linear-gradient(to bottom, black 70%, transparent 100%)', WebkitMaskImage: 'linear-gradient(to bottom, black 70%, transparent 100%)'}}>      <style>{`
         @keyframes fade-in-down { from{opacity:0;transform:translateY(-20px)} to{opacity:1;transform:translateY(0)} }
         @keyframes fade-in-up { from{opacity:0;transform:translateY(30px)} to{opacity:1;transform:translateY(0)} }
         .anim-down{animation:fade-in-down 0.8s ease-out forwards}
