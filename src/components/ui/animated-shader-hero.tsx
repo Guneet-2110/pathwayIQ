@@ -189,26 +189,8 @@ const Hero: React.FC<HeroProps> = ({ trustBadge, headline, subtitle, buttons, cl
             <p className="text-lg md:text-xl text-white/70 font-light leading-relaxed">{subtitle}</p>
           </div>
 
-          {buttons && (
-            <div className="flex flex-col sm:flex-row gap-4 justify-center mt-10 anim-up delay-800">
-              {buttons.primary && (
-                
-                  href={buttons.primary.href || '#'}
-                  onClick={buttons.primary.onClick}
-                  className="px-8 py-4 bg-indigo-500 hover:bg-indigo-400 text-white rounded-xl font-semibold text-lg transition-all duration-300 hover:scale-105 hover:shadow-xl hover:shadow-indigo-500/25"
-                >
-                  {buttons.primary.text}
-                </a>
-              )}
-              {buttons.secondary && (
-                
-                  href={buttons.secondary.href || '#'}
-                  onClick={buttons.secondary.onClick}
-                  className="px-8 py-4 bg-white/5 hover:bg-white/10 border border-white/20 hover:border-indigo-300/50 text-white rounded-xl font-semibold text-lg transition-all duration-300 hover:scale-105 backdrop-blur-sm"
-                >
-                  {buttons.secondary.text}
-                </a>
-              )}
+          {buttons.primary && (<a href={buttons.primary.href || '#'} onClick={buttons.primary.onClick} className="px-8 py-4 bg-indigo-500 hover:bg-indigo-400 text-white rounded-xl font-semibold text-lg transition-all duration-300 hover:scale-105 hover:shadow-xl hover:shadow-indigo-500/25">{buttons.primary.text}</a>)}
+{buttons.secondary && (<a href={buttons.secondary.href || '#'} onClick={buttons.secondary.onClick} className="px-8 py-4 bg-white/5 hover:bg-white/10 border border-white/20 hover:border-indigo-300/50 text-white rounded-xl font-semibold text-lg transition-all duration-300 hover:scale-105 backdrop-blur-sm">{buttons.secondary.text}</a>)}
             </div>
           )}
         </div>
