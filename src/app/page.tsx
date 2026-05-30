@@ -102,8 +102,7 @@ export default function LandingPage() {
             {
               grade: '9th and 10th grade',
               emoji: '📚',
-              desc: 'The courses you take freshman and sophomore year shape what's available later. The extracurriculars you start now have time to actually go somewhere. This is when the plan matters most.',
-            },
+desc: "The courses you take freshman and sophomore year shape what's available later. The extracurriculars you start now have time to actually go somewhere. This is when the plan matters most.",            },
             {
               grade: '11th and 12th grade',
               emoji: '🎓',
