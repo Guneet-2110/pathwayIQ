@@ -4,7 +4,7 @@ import Hero from '@/components/ui/animated-shader-hero'
 
 export default function LandingPage() {
   return (
-    <main className="text-white overflow-x-hidden" style={{background: 'linear-gradient(135deg, #0a0a1a 0%, #0d0a2e 25%, #0a0f2e 50%, #080a20 75%, #050510 100%)'}}>
+    <main className="text-white overflow-x-hidden" style={{background: 'linear-gradient(180deg, #030308 0%, #0d0a2e 15%, #130d3d 30%, #0d0a2e 50%, #080818 70%, #030308 100%)'}}>
 
       {/* Fixed Nav */}
       <div className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-8 py-5 bg-black/30 backdrop-blur-md border-b border-white/5">
