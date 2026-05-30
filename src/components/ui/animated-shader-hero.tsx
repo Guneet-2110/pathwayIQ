@@ -90,7 +90,7 @@ void main(void){
     }
 
     const loop = (now: number) => {
-      gl.clearColor(0,0,0,1)
+      gl.clearColor(0,0,0,0)
       gl.clear(gl.COLOR_BUFFER_BIT)
       gl.useProgram(program)
       gl.bindBuffer(gl.ARRAY_BUFFER, buffer)
@@ -117,7 +117,15 @@ const Hero: React.FC<HeroProps> = ({ trustBadge, headline, subtitle, buttons, cl
   const canvasRef = useShaderBackground()
 
   return (
-<div className={`relative w-full h-screen overflow-hidden ${className}`} style={{background: 'transparent', maskImage: 'linear-gradient(to bottom, black 60%, transparent 100%)', WebkitMaskImage: 'linear-gradient(to bottom, black 60%, transparent 100%)'}}>        @keyframes fade-in-down { from{opacity:0;transform:translateY(-20px)} to{opacity:1;transform:translateY(0)} }
+    <div
+      className={`relative w-full h-screen overflow-hidden ${className}`}
+      style={{
+        maskImage: 'linear-gradient(to bottom, black 60%, transparent 100%)',
+        WebkitMaskImage: 'linear-gradient(to bottom, black 60%, transparent 100%)',
+      }}
+    >
+      <style>{`
+        @keyframes fade-in-down { from{opacity:0;transform:translateY(-20px)} to{opacity:1;transform:translateY(0)} }
         @keyframes fade-in-up { from{opacity:0;transform:translateY(30px)} to{opacity:1;transform:translateY(0)} }
         .anim-down{animation:fade-in-down 0.8s ease-out forwards}
         .anim-up{animation:fade-in-up 0.8s ease-out forwards;opacity:0}
@@ -127,7 +135,12 @@ const Hero: React.FC<HeroProps> = ({ trustBadge, headline, subtitle, buttons, cl
         .delay-800{animation-delay:0.8s}
       `}</style>
 
-<canvas ref={canvasRef} className="absolute inset-0 w-full h-full touch-none" style={{background:'transparent', opacity: 0.7}} />
+      <canvas
+        ref={canvasRef}
+        className="absolute inset-0 w-full h-full touch-none"
+        style={{opacity: 0.75}}
+      />
+
       <div className="absolute inset-0 z-10 flex flex-col items-center justify-center text-white px-4">
         {trustBadge && (
           <div className="mb-8 anim-down">
@@ -137,7 +150,6 @@ const Hero: React.FC<HeroProps> = ({ trustBadge, headline, subtitle, buttons, cl
             </div>
           </div>
         )}
-
         <div className="text-center space-y-6 max-w-5xl mx-auto">
           <div className="space-y-2">
             <h1 className="text-5xl md:text-7xl lg:text-8xl font-extrabold bg-gradient-to-r from-indigo-300 via-purple-300 to-indigo-400 bg-clip-text text-transparent anim-up delay-200">{headline.line1}</h1>
