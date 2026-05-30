@@ -28,9 +28,9 @@ PathwayIQ generates a fully personalized plan including:
 ## Environment Variables
 
 Create a `.env.local` file with:
-NEXT_PUBLIC_SUPABASE_URL=https://zedocnlgwfsrbxdyyjko.supabase.co
-NEXT_PUBLIC_SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InplZG9jbmxnd2ZzcmJ4ZHl5amtvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk4MTcyODEsImV4cCI6MjA5NTM5MzI4MX0.Tu1XQWT2wcXpPwCqp7peTgsklwXpJNMoMljflW3cNhE
-GEMINI_API_KEY=AIzaSyAuwrK9sRdYnZnLEMGAXXw9XM9KUthO5Lc
+NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
+GEMINI_API_KEY=your_gemini_key
 
 ## Getting Started
 
