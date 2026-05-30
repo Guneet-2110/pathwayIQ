@@ -117,8 +117,7 @@ const Hero: React.FC<HeroProps> = ({ trustBadge, headline, subtitle, buttons, cl
   const canvasRef = useShaderBackground()
 
   return (
-<div className={`relative w-full h-screen overflow-hidden bg-black ${className}`} style={{maskImage: 'linear-gradient(to bottom, black 70%, transparent 100%)', WebkitMaskImage: 'linear-gradient(to bottom, black 70%, transparent 100%)'}}>      <style>{`
-        @keyframes fade-in-down { from{opacity:0;transform:translateY(-20px)} to{opacity:1;transform:translateY(0)} }
+<div className={`relative w-full h-screen overflow-hidden ${className}`} style={{background: 'transparent', maskImage: 'linear-gradient(to bottom, black 60%, transparent 100%)', WebkitMaskImage: 'linear-gradient(to bottom, black 60%, transparent 100%)'}}>        @keyframes fade-in-down { from{opacity:0;transform:translateY(-20px)} to{opacity:1;transform:translateY(0)} }
         @keyframes fade-in-up { from{opacity:0;transform:translateY(30px)} to{opacity:1;transform:translateY(0)} }
         .anim-down{animation:fade-in-down 0.8s ease-out forwards}
         .anim-up{animation:fade-in-up 0.8s ease-out forwards;opacity:0}
@@ -128,8 +127,7 @@ const Hero: React.FC<HeroProps> = ({ trustBadge, headline, subtitle, buttons, cl
         .delay-800{animation-delay:0.8s}
       `}</style>
 
-      <canvas ref={canvasRef} className="absolute inset-0 w-full h-full touch-none" style={{background:'black'}} />
-
+<canvas ref={canvasRef} className="absolute inset-0 w-full h-full touch-none" style={{background:'transparent', opacity: 0.7}} />
       <div className="absolute inset-0 z-10 flex flex-col items-center justify-center text-white px-4">
         {trustBadge && (
           <div className="mb-8 anim-down">
