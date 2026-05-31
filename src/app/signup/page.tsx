@@ -98,7 +98,7 @@ export default function SignupPage() {
               onClick={() => router.push('/pricing')}
               className="w-full bg-white/5 hover:bg-white/10 border border-white/10 text-white/60 hover:text-white font-semibold py-3 rounded-xl transition text-sm"
             >
-              ⚡ Upgrade to Pro — unlock all features
+              ⚡ Upgrade to Pro - unlock all features
             </button>
           </div>
         </div>
