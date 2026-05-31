@@ -127,24 +127,17 @@ export default function QuizPage() {
     }
   }
 
-  async function handleSubmit() {
+   async function handleSubmit() {
     setLoading(true)
     const { data: { user } } = await supabase.auth.getUser()
     if (!user) return
 
-    const finalAnswers = q.type === 'text'
-      ? { ...answers, [q.id]: textInput }
-      : answers
+    const finalAnswers = q.type === 'text' ? { ...answers, [q.id]: textInput } : answers
 
-    await supabase.from('quiz_responses').insert({
-      user_id: user.id,
-      answers: finalAnswers,
-    })
+    await supabase.from('quiz_responses').insert({ user_id: user.id, answers: finalAnswers })
 
-    const params = new URLSearchParams({
-      answers: JSON.stringify(finalAnswers),
-    })
-    router.push(`/results?${params.toString()}`)
+    sessionStorage.setItem('pathwayiq_answers', JSON.stringify(finalAnswers))
+    router.push('/results')
   }
 
   return (
