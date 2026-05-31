@@ -19,39 +19,38 @@ export default function SignupPage() {
   async function handleSignup() {
     setLoading(true)
     setError('')
-
     const { data, error: signupError } = await supabase.auth.signUp({
       email,
       password,
       options: { emailRedirectTo: `${window.location.origin}/dashboard` },
     })
-
     if (signupError) {
       setError(signupError.message)
       setLoading(false)
       return
     }
-
     if (data.user) {
       await supabase.from('profiles').insert({ user_id: data.user.id, name, grade })
     }
-
     setSuccess(true)
     setLoading(false)
   }
 
- if (success) {
+  if (success) {
     return (
       <main className="min-h-screen text-white flex items-center justify-center px-4 relative">
         <ShaderBackground />
         <div className="relative z-10 w-full max-w-lg text-center">
           <div className="text-6xl mb-6">🎉</div>
           <h1 className="text-4xl font-extrabold mb-3">
-            Welcome to PathwayIQ,<br />
+            Welcome to PathwayIQ,
+            <br />
             <span className="text-indigo-400">{name.split(' ')[0]}!</span>
           </h1>
           <p className="text-white/50 text-sm mb-8 leading-relaxed max-w-sm mx-auto">
-            We sent a confirmation link to <span className="text-white font-medium">{email}</span>. Click it to activate your account then come back and build your roadmap.
+            We sent a confirmation link to{' '}
+            <span className="text-white font-medium">{email}</span>.
+            Click it to activate your account then come back and build your roadmap.
           </p>
           <div className="grid grid-cols-3 gap-4 mb-10">
             {[
@@ -73,32 +72,13 @@ export default function SignupPage() {
               onClick={() => router.push('/dashboard')}
               className="w-full bg-indigo-500 hover:bg-indigo-400 text-white font-semibold py-4 rounded-xl transition text-lg"
             >
-              Go to Dashboard →
+              Go to Dashboard
             </button>
             <button
               onClick={() => router.push('/pricing')}
               className="w-full bg-white/10 hover:bg-white/20 border border-indigo-400/30 text-indigo-300 hover:text-white font-semibold py-3 rounded-xl transition text-sm backdrop-blur-sm"
             >
-              ⚡ Upgrade to Pro — unlock Essay Help, Interview Prep & more
-            </button>
-          </div>
-        </div>
-      </main>
-    )
-  }
-
-          <div className="flex flex-col gap-3">
-            <button
-              onClick={() => router.push('/dashboard')}
-              className="w-full bg-indigo-500 hover:bg-indigo-400 text-white font-semibold py-4 rounded-xl transition text-lg"
-            >
-              Go to Dashboard →
-            </button>
-            <button
-              onClick={() => router.push('/pricing')}
-              className="w-full bg-white/5 hover:bg-white/10 border border-white/10 text-white/60 hover:text-white font-semibold py-3 rounded-xl transition text-sm"
-            >
-              ⚡ Upgrade to Pro - unlock all features
+              Upgrade to Pro - unlock Essay Help, Interview Prep and more
             </button>
           </div>
         </div>
@@ -115,7 +95,6 @@ export default function SignupPage() {
           </a>
           <p className="text-white/50 mt-2 text-sm">Create your free account</p>
         </div>
-
         <div className="bg-white/5 border border-white/10 rounded-2xl p-8 flex flex-col gap-4">
           <div>
             <label className="text-sm text-white/60 mb-1 block">Full Name</label>
@@ -141,17 +120,14 @@ export default function SignupPage() {
               <option value="12" className="bg-slate-900">12th Grade (Senior)</option>
             </select>
           </div>
-
           {error && <p className="text-red-400 text-sm text-center">{error}</p>}
-
           <button
             onClick={handleSignup}
             disabled={loading || !name || !email || !password || !grade}
             className="w-full bg-indigo-500 hover:bg-indigo-400 disabled:opacity-40 disabled:cursor-not-allowed text-white font-semibold py-3 rounded-lg transition mt-2"
           >
-            {loading ? 'Creating account...' : 'Create Account →'}
+            {loading ? 'Creating account...' : 'Create Account'}
           </button>
-
           <p className="text-center text-white/40 text-sm">
             Already have an account?{' '}
             <a href="/login" className="text-indigo-400 hover:underline">Log in</a>
