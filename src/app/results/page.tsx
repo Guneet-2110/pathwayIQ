@@ -2,11 +2,10 @@
 
 import { Suspense } from 'react'
 import { useEffect, useState } from 'react'
-import { useSearchParams, useRouter } from 'next/navigation'
+import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase'
 
 function ResultsContent() {
-  const searchParams = useSearchParams()
   const router = useRouter()
   const supabase = createClient()
   const [data, setData] = useState<any>(null)
@@ -16,7 +15,7 @@ function ResultsContent() {
 
   useEffect(() => {
     async function generate() {
-      const answersRaw = searchParams.get('answers')
+      const answersRaw = sessionStorage.getItem('pathwayiq_answers')
       if (!answersRaw) {
         router.push('/quiz')
         return
@@ -25,14 +24,13 @@ function ResultsContent() {
       try {
         const answers = JSON.parse(answersRaw)
         const res = await fetch('/api/generate-roadmap', {
-  method: 'POST',
-  headers: { 'Content-Type': 'application/json' },
-  body: JSON.stringify({ answers }),
-})
-const json = await res.json()
-console.log('API response:', json)
-if (!json.success) throw new Error(json.error)
-setData(json.data)
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ answers }),
+        })
+        const json = await res.json()
+        if (!json.success) throw new Error(json.error)
+        setData(json.data)
       } catch (e) {
         setError('Failed to generate your roadmap. Please try again.')
       } finally {
@@ -58,6 +56,7 @@ setData(json.data)
       .select()
       .single()
 
+    sessionStorage.removeItem('pathwayiq_answers')
     router.push(`/roadmap/${saved.id}`)
   }
 
@@ -96,26 +95,18 @@ setData(json.data)
           </div>
           <h1 className="text-4xl font-extrabold mb-3">Your Career Matches</h1>
           <p className="text-white/50">
-            Based on your answers, here are your top 3 matches. Select one to
-            generate your full 4-year roadmap.
+            Based on your answers, here are your top 3 matches. Select one to build your full 4-year roadmap.
           </p>
         </div>
 
         <div className="grid md:grid-cols-3 gap-6 mb-12">
           {data?.career_matches?.map((career: any, i: number) => (
-            <div
-              key={i}
-              className="bg-white/5 border border-white/10 rounded-2xl p-6 flex flex-col gap-4 hover:bg-white/10 transition"
-            >
+            <div key={i} className="bg-white/5 border border-white/10 rounded-2xl p-6 flex flex-col gap-4 hover:bg-white/10 transition">
               <div className="flex items-start justify-between">
                 <h2 className="text-lg font-bold leading-tight">{career.title}</h2>
-                <span className="bg-indigo-500/20 text-indigo-300 text-sm font-bold px-3 py-1 rounded-full shrink-0 ml-2">
-                  {career.fit_score}%
-                </span>
+                <span className="bg-indigo-500/20 text-indigo-300 text-sm font-bold px-3 py-1 rounded-full shrink-0 ml-2">{career.fit_score}%</span>
               </div>
-              <p className="text-white/50 text-sm leading-relaxed flex-1">
-                {career.description}
-              </p>
+              <p className="text-white/50 text-sm leading-relaxed flex-1">{career.description}</p>
               <div className="flex flex-col gap-1 text-sm">
                 <div className="flex justify-between text-white/40">
                   <span>Salary</span>
@@ -126,6 +117,14 @@ setData(json.data)
                   <span className="text-white/70">{career.growth_outlook}</span>
                 </div>
               </div>
+              {career.day_in_life && <p className="text-white/30 text-xs italic">{career.day_in_life}</p>}
+              {career.top_skills_needed?.length > 0 && (
+                <div className="flex flex-wrap gap-1">
+                  {career.top_skills_needed.map((s: string, j: number) => (
+                    <span key={j} className="bg-white/10 text-white/50 text-xs px-2 py-0.5 rounded-full">{s}</span>
+                  ))}
+                </div>
+              )}
               <button
                 onClick={() => handleSelect(career)}
                 disabled={saving}
@@ -143,14 +142,12 @@ setData(json.data)
 
 export default function ResultsPage() {
   return (
-    <Suspense
-      fallback={
-        <main className="min-h-screen bg-gradient-to-br from-indigo-950 via-purple-950 to-slate-900 text-white flex flex-col items-center justify-center gap-6">
-          <div className="w-16 h-16 border-4 border-indigo-400 border-t-transparent rounded-full animate-spin" />
-          <p className="text-white/40 text-sm">Loading...</p>
-        </main>
-      }
-    >
+    <Suspense fallback={
+      <main className="min-h-screen bg-gradient-to-br from-indigo-950 via-purple-950 to-slate-900 text-white flex flex-col items-center justify-center gap-6">
+        <div className="w-16 h-16 border-4 border-indigo-400 border-t-transparent rounded-full animate-spin" />
+        <p className="text-white/40 text-sm">Loading...</p>
+      </main>
+    }>
       <ResultsContent />
     </Suspense>
   )
