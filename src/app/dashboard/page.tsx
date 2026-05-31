@@ -19,6 +19,16 @@ export default function DashboardPage() {
         return
       }
 
+      // Check if returning from successful Stripe checkout
+      const urlParams = new URLSearchParams(window.location.search)
+      if (urlParams.get('upgraded') === 'true') {
+        await supabase
+          .from('profiles')
+          .update({ is_pro: true })
+          .eq('user_id', user.id)
+        window.history.replaceState({}, '', '/dashboard')
+      }
+
       const [{ data: profileData }, { data: roadmapData }] = await Promise.all([
         supabase.from('profiles').select('*').eq('user_id', user.id).single(),
         supabase.from('roadmaps').select('*').eq('user_id', user.id).order('created_at', { ascending: false }),
