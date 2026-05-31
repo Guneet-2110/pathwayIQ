@@ -423,15 +423,19 @@ export default function RoadmapPage() {
     load()
   }, [id])
 
-  async function handleSaveExtra(key: string, data: any) {
+async function handleSaveExtra(key: string, data: any) {
+    console.log('Saving:', key, 'to roadmap:', id)
     const updateObj: Record<string, any> = {}
     updateObj[key] = data
-    const { error } = await supabase
+    const { data: result, error } = await supabase
       .from('roadmaps')
       .update(updateObj)
       .eq('id', id as string)
+      .select()
+    console.log('Save result:', result)
+    console.log('Save error:', error)
     if (error) {
-      console.error('Save error:', error)
+      console.error('Save error details:', JSON.stringify(error))
     } else {
       setRoadmap((prev: any) => ({ ...prev, [key]: data }))
     }
