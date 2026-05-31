@@ -36,13 +36,15 @@ export async function POST(req: NextRequest) {
         .eq('user_id', user.id)
     }
 
+    const { months = 1 } = await req.json().catch(() => ({ months: 1 }))
+
     const session = await stripe.checkout.sessions.create({
       customer: customerId,
       payment_method_types: ['card'],
       line_items: [
         {
           price: process.env.STRIPE_PRICE_ID!,
-          quantity: 1,
+          quantity: months,
         },
       ],
       mode: 'subscription',
