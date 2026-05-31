@@ -21,18 +21,24 @@ export async function POST(req: NextRequest) {
 
   const supabase = await createServerSupabaseClient()
 
+  console.log('Webhook event:', event.type)
+
   if (event.type === 'checkout.session.completed') {
     const session = event.data.object as Stripe.CheckoutSession
     const userId = session.metadata?.user_id
+    console.log('Checkout completed for user:', userId)
 
     if (userId) {
-      await supabase
+      const { error } = await supabase
         .from('profiles')
-        .update({
+        .upsert({
+          user_id: userId,
           is_pro: true,
           stripe_subscription_id: session.subscription as string,
-        })
-        .eq('user_id', userId)
+        }, { onConflict: 'user_id' })
+
+      if (error) console.error('Supabase update error:', error)
+      else console.log('User upgraded to pro:', userId)
     }
   }
 
