@@ -31,7 +31,8 @@ export default function DashboardPage() {
     load()
   }, [])
 
-  async function handleDelete(id: string) {
+async function handleDelete(id: string, title: string) {
+    if (!confirm(`Delete "${title}"? This cannot be undone.`)) return
     await supabase.from('roadmaps').delete().eq('id', id)
     setRoadmaps((prev) => prev.filter((r) => r.id !== id))
   }
@@ -105,8 +106,7 @@ export default function DashboardPage() {
                       })}
                     </p>
                   </div>
-                  <button onClick={() => handleDelete(r.id)} className="text-white/20 hover:text-red-400 transition text-sm">Delete</button>
-                </div>
+<button onClick={() => handleDelete(r.id, r.selected_career)} className="text-white/20 hover:text-red-400 transition text-sm">Delete</button>                </div>
 
                 <div className="flex flex-wrap gap-2 mb-5">
                   {r.career_matches?.slice(0, 3).map((c: any, i: number) => (
