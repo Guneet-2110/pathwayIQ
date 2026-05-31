@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { createClient } from '@/lib/supabase'
 import { useRouter } from 'next/navigation'
+import ShaderBackground from '@/components/ui/shader-background'
 
 export default function SignupPage() {
   const supabase = createClient()
@@ -39,19 +40,19 @@ export default function SignupPage() {
     setLoading(false)
   }
 
-  if (success) {
+ if (success) {
     return (
-      <main className="min-h-screen bg-gradient-to-br from-indigo-950 via-purple-950 to-slate-900 text-white flex items-center justify-center px-4">
-        <div className="w-full max-w-lg text-center">
+      <main className="min-h-screen text-white flex items-center justify-center px-4 relative">
+        <ShaderBackground />
+        <div className="relative z-10 w-full max-w-lg text-center">
           <div className="text-6xl mb-6">🎉</div>
           <h1 className="text-4xl font-extrabold mb-3">
             Welcome to PathwayIQ,<br />
             <span className="text-indigo-400">{name.split(' ')[0]}!</span>
           </h1>
           <p className="text-white/50 text-sm mb-8 leading-relaxed max-w-sm mx-auto">
-            We sent a confirmation link to <span className="text-white font-medium">{email}</span>. Click it to activate your account — then come back and build your roadmap.
+            We sent a confirmation link to <span className="text-white font-medium">{email}</span>. Click it to activate your account then come back and build your roadmap.
           </p>
-
           <div className="grid grid-cols-3 gap-4 mb-10">
             {[
               { icon: '🗓️', label: '4-Year Plan' },
@@ -61,12 +62,30 @@ export default function SignupPage() {
               { icon: '🎤', label: 'Interview Prep' },
               { icon: '✅', label: 'Progress Tracker' },
             ].map((f) => (
-              <div key={f.label} className="bg-white/5 border border-white/10 rounded-xl p-4 text-center">
+              <div key={f.label} className="bg-white/5 border border-white/10 rounded-xl p-4 text-center backdrop-blur-sm">
                 <div className="text-2xl mb-1">{f.icon}</div>
                 <p className="text-white/50 text-xs">{f.label}</p>
               </div>
             ))}
           </div>
+          <div className="flex flex-col gap-3">
+            <button
+              onClick={() => router.push('/dashboard')}
+              className="w-full bg-indigo-500 hover:bg-indigo-400 text-white font-semibold py-4 rounded-xl transition text-lg"
+            >
+              Go to Dashboard →
+            </button>
+            <button
+              onClick={() => router.push('/pricing')}
+              className="w-full bg-white/10 hover:bg-white/20 border border-indigo-400/30 text-indigo-300 hover:text-white font-semibold py-3 rounded-xl transition text-sm backdrop-blur-sm"
+            >
+              ⚡ Upgrade to Pro — unlock Essay Help, Interview Prep & more
+            </button>
+          </div>
+        </div>
+      </main>
+    )
+  }
 
           <div className="flex flex-col gap-3">
             <button
